@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday, AluSaag!</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      /* NEW: Beautiful nature/autumn forest background */
+      background: url('https://images.unsplash.com/photo-1443632864897-14973fa006cf?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* NEW: Falling Red Leaves */
+    .leaf {
+      position: fixed;
+      top: -20px;
+      background: #c1121f; /* Deep autumn red */
+      border-radius: 0% 80%; /* Creates a classic leaf shape! */
+      opacity: 0.85;
+      pointer-events: none; /* Stops leaves from blocking taps */
+      z-index: 1;
+      animation: fall linear infinite, rotateLeaf 3s linear infinite;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(105vh); }
+    }
+    @keyframes rotateLeaf {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Main Content Box */
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      z-index: 10;
+      width: 85%;
+      max-width: 400px;
+      position: relative;
+    }
+
+    #kitty {
+      font-size: 70px;
+      margin: 0;
+      transition: transform 0.3s ease;
+    }
+
+    h1 {
+      color: #c9184a;
+      margin-bottom: 20px;
+      font-size: 22px;
+      line-height: 1.4;
+    }
+
+    /* Mobile Button Layout */
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 20px; 
+      margin-top: 20px;
+      min-height: 60px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+      touch-action: manipulation;
+    }
+
+    #yesBtn {
+      background-color: #ff4d6d;
+      box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+      z-index: 5;
+    }
+
+    #noBtn {
+      background-color: #8d99ae;
+      z-index: 4;
+      transition: transform 0.2s ease, left 0.1s ease, top 0.1s ease;
+    }
+
+    /* Final Question Area */
+    #captchaArea {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    #captchaArea input {
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #ff4d6d;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      width: 90%;
+      text-align: center;
+    }
+
+    #submitCaptcha {
+      background-color: #4CAF50;
+      width: 100%;
+    }
+
+    #finalArea {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .whatsapp-btn {
+      padding: 15px 20px;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 16px;
+      display: inline-block;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      width: 90%;
+    }
+
+    /* Music Player Icon */
+    #audio-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      color: #be185d;
+      z-index: 20;
+      border: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Fake Complain Button */
+    #fakeBtn {
+      display: none; /* NEW: Hidden by default! */
+      position: fixed;
+      bottom: 20px;
+      background: rgba(255, 255, 255, 0.85);
+      color: #d90429;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 50px;
+      border: 2px solid #d90429;
+      z-index: 5;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="audio-btn">🔇</button>
+
+  <div class="container">
+    <div id="kitty">😸</div>
+    <h1 id="message">Happy Birthday, AluSaag! 🎂<br>Are you giving me the birthday treat?</h1>
+    
+    <div class="buttons" id="buttonContainer">
+      <button id="yesBtn">YES</button>
+      <button id="noBtn">NO</button>
+    </div>
+
+    <div id="captchaArea">
+      <h1 style="font-size: 18px; color: #333; margin-bottom: 10px;">Where are you taking me to fill my full??</h1>
+      <input type="text" id="treatAnswer" placeholder="Type the restaurant/place here...">
+      <button id="submitCaptcha">Submit Answer</button>
+    </div>
+
+    <div id="finalArea"></div>
+  </div>
+
+  <button id="fakeBtn">Complain to Isha & Saras</button>
+
+  <audio id="bg-music" loop>
+    <source src="ytmp3free.cc_always-with-me-spirited-away-piano-youtubemp3free.org.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // --- 1. RED LEAF GENERATOR ---
+    for (let i = 0; i < 30; i++) {
+      let leaf = document.createElement('div');
+      leaf.classList.add('leaf');
+      let size = Math.random() * 12 + 10;
+      leaf.style.width = size + 'px';
+      leaf.style.height = size + 'px';
+      leaf.style.left = Math.random() * window.innerWidth + 'px';
+      leaf.style.animationDuration = (Math.random() * 4 + 3) + 's, ' + (Math.random() * 2 + 2) + 's';
+      leaf.style.animationDelay = Math.random() * 5 + 's';
+      document.body.appendChild(leaf);
+    }
+
+    // --- 2. GETTING ALL ELEMENTS ---
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const message = document.getElementById('message');
+    const kitty = document.getElementById('kitty');
+    const buttonContainer = document.getElementById('buttonContainer');
+    const captchaArea = document.getElementById('captchaArea');
+    const submitCaptcha = document.getElementById('submitCaptcha');
+    const finalArea = document.getElementById('finalArea');
+    const audioBtn = document.getElementById('audio-btn');
+    const bgMusic = document.getElementById('bg-music');
+    const fakeBtn = document.getElementById('fakeBtn');
+
+    // Frog Jump Sound Effect
+    const jumpSound = new Audio('https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg');
+
+    const noMessages = [
+      "Please, don't be so cruel! 😿",
+      "Sirf Isha aur Saras tumhare dost hain...taras khao na mujh pe 🥺",
+      "Kitni battamiz ho tum 😾",
+      "Please Alusaag 😭"
+    ];
+
+    let noTouchCount = 0;
+    let isJumpingPhase = false;
+
+    // --- 3. THE NO BUTTON LOGIC ---
+    function moveButtonRandomly() {
+      const randomX = Math.random() * (window.innerWidth - noBtn.clientWidth - 20) + 10;
+      const randomY = Math.random() * (window.innerHeight - noBtn.clientHeight - 80) + 50;
+      noBtn.style.left = randomX + 'px';
+      noBtn.style.top = randomY + 'px';
+    }
+
+    // Normal click logic for the shrinking phase
+    noBtn.addEventListener('click', function(e) {
+      if (isJumpingPhase) return;
+
+      message.innerHTML = noMessages[noTouchCount];
+      
+      let currentScale = 1 - ((noTouchCount + 1) * 0.1);
+      noBtn.style.transform = `scale(${currentScale})`;
+      
+      if (noTouchCount === 0) kitty.innerText = "😿";
+      else if (noTouchCount === 1) {
+        kitty.innerText = "🥺";
+        // NEW: Reveal the Complain button exactly on this message!
+        fakeBtn.style.display = 'block'; 
+      }
+      else if (noTouchCount === 2) kitty.innerText = "😾";
+      else if (noTouchCount === 3) kitty.innerText = "😭";
+      
+      noTouchCount++;
+      
+      // Turn into a jumping frog
+      if (noTouchCount === 4) {
+        isJumpingPhase = true;
+        setTimeout(() => {
+          noBtn.innerHTML = "🐸 NO 🐸";
+          noBtn.style.backgroundColor = "#4CAF50";
+          noBtn.style.transform = `scale(1.2)`;
+          noBtn.style.position = 'fixed';
+          moveButtonRandomly(); 
+        }, 400);
+      }
+    });
+
+    // Dodge logic for the frog phase 
+    function dodge() {
+      if (isJumpingPhase) {
+        jumpSound.currentTime = 0;
+        jumpSound.play();
+        moveButtonRandomly();
+      }
+    }
+    noBtn.addEventListener('mouseenter', dodge);
+    noBtn.addEventListener('touchstart', function(e) {
+      if (isJumpingPhase) {
+        e.preventDefault(); 
+        dodge();
+      }
+    });
+
+    // --- 4. THE YES BUTTON LOGIC ---
+    yesBtn.addEventListener('click', function() {
+      if (!isJumpingPhase) {
+        message.innerHTML = "Try the NO Button, it's fun 😈";
+        kitty.innerText = "😼";
+        return;
+      }
+
+      // Success Phase
+      buttonContainer.style.display = 'none';
+      noBtn.style.display = 'none'; 
+      
+      kitty.innerText = "🥔😻🥔"; 
+      message.innerHTML = "Thank you AluSaag, God bless you...Mujhe maloon tha tum Na nhhi kah paogi. Tumhara dil jo itna bada hai. ❤️<br><br>Okay!! Now submit this security question:";
+      
+      captchaArea.style.display = 'flex';
+    });
+
+    // --- 5. THE FINAL WHATSAPP SUBMISSION ---
+    submitCaptcha.addEventListener('click', function() {
+      let treatAns = document.getElementById('treatAnswer').value;
+      if(treatAns.trim() === "") {
+        alert("You have to tell me where we are going, AluSaag!");
+        return;
+      }
+
+      captchaArea.style.display = 'none';
+      fakeBtn.style.display = 'none';
+      message.innerHTML = "Perfect! 🎉<br>Click below to send me your official RSVP.";
+      kitty.style.transform = "scale(1.3)";
+
+      let waText = `Hey! I surrender! 😂\nFor my birthday treat, I am taking you to: ${treatAns} 🥳`;
+      
+      // *** REMINDER: REPLACE '91YOURPHONENUMBER' BELOW WITH YOUR ACTUAL NUMBER ***
+      let waLink = `https://wa.me/917856978442?text=${encodeURIComponent(waText)}`;
+
+      finalArea.innerHTML = `<a href="${waLink}" class="whatsapp-btn" target="_blank">Send RSVP via WhatsApp 📲</a>`;
+      finalArea.style.display = 'block';
+    });
+
+    // --- 6. FAKE BUTTON LOGIC ---
+    fakeBtn.addEventListener('click', function() {
+      alert("Nice try, their numbers are blocked right now. 📵");
+    });
+
+    // --- 7. MUSIC TOGGLE LOGIC ---
+    let isPlaying = false;
+    audioBtn.addEventListener('click', function() {
+      if (isPlaying) {
+        bgMusic.pause();
+        audioBtn.innerText = "🔇";
+      } else {
+        bgMusic.play();
+        audioBtn.innerText = "🔊";
+      }
+      isPlaying = !isPlaying;
+    });
+  </script>
+
+</body>
+</html>
