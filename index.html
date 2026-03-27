@@ -178,11 +178,11 @@
 
   <div class="container">
     <div id="kitty">😸</div>
-    <h1 id="message">Happy Birthday, AluSaag! 🎂<br>Are you giving me the birthday treat?</h1>
+    <h1 id="message">Happy Birthday, AluSaag! 🎂<br>Are you giving me a birthday treat, hmm?</h1>
     
     <div class="buttons" id="buttonContainer">
       <button id="yesBtn">YES</button>
-      <button id="noBtn">NO</button>
+      <button id="noBtn">Nooo</button>
     </div>
 
     <div id="captchaArea">
@@ -232,9 +232,9 @@
 
     const noMessages = [
       "Please, don't be so cruel! 😿",
-      "Sirf Isha aur Saras tumhare dost hain...taras khao na mujh pe 🥺",
-      "Kitni battamiz ho tum 😾",
-      "Please Alusaag 😭"
+      "Sirf Isha aur Saras tumhare dost hain...taras khao na mujh pe bhi 🥺",
+      "Kitni battamiz ho tum😾, Please humko bhi le jao",
+      "Please Alusaag, le jao na 😭"
     ];
 
     let noTouchCount = 0;
@@ -310,7 +310,7 @@
       noBtn.style.display = 'none'; 
       
       kitty.innerText = "🥔😻🥔"; 
-      message.innerHTML = "Thank you AluSaag, God bless you...Mujhe maloon tha tum Na nhhi kah paogi. Tumhara dil jo itna bada hai. ❤️<br><br>Okay!! Now submit this security question:";
+      message.innerHTML = "Thank you AluSaag, God bless you...Mujhe maloon tha tum Na nhhi kah paogi...hehe Tumhara dil jo itna bada hai. ❤️<br><br>Okay!! Now submit this security question:";
       
       captchaArea.style.display = 'flex';
     });
@@ -328,7 +328,7 @@
       message.innerHTML = "Perfect! 🎉<br>Click below to send me your official RSVP.";
       kitty.style.transform = "scale(1.3)";
 
-      let waText = `Hey! I surrender! 😂\nFor my birthday treat, I am taking you to: ${treatAns} 🥳`;
+      let waText = `Haan thik hai chalo baba, 😂\nFor my birthday treat, I am taking you to: ${treatAns} 🥳`;
       
       // *** REMINDER: REPLACE '91YOURPHONENUMBER' BELOW WITH YOUR ACTUAL NUMBER ***
       let waLink = `https://wa.me/917856978442?text=${encodeURIComponent(waText)}`;
