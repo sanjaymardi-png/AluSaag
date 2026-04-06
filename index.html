@@ -105,7 +105,7 @@
 <body>
 
   <audio id="bg-music" loop>
-    <source src="music.mp3" type="audio/mpeg">
+    <source src="alwayswithmepiano.mp3" type="audio/mpeg">
   </audio>
   <button id="audio-btn" onclick="toggleMusic()">🎵</button>
 
@@ -157,7 +157,7 @@
 
   <script>
     let securityStep = 1;
-    const correctBirthday = "5 May"; 
+    const correctBirthday = "14 May"; 
     const correctPlace = "Tuition"; 
 
     function goToStage(num) {
@@ -185,7 +185,7 @@
           desc.innerHTML = "Where did we first meet?<br><small>(Hint: The Park)</small>";
           status.innerText = "";
         } else {
-          status.innerText = "Wrong date! Try again.";
+          status.innerText = "Wrong date! Are you an imposter??";
           status.style.color = "red";
         }
       } else {
@@ -193,7 +193,7 @@
           goToStage(2);
           try { document.getElementById('bg-music').play(); } catch(e){}
         } else {
-          status.innerText = "Nope! That's not right.";
+          status.innerText = "Nope! That's not right. Who are you??";
         }
       }
     }
