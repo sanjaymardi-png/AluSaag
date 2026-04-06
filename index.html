@@ -1,24 +1,14 @@
-# 🎂 **Fully Refactored Birthday Website**
-
-Here's the **production-ready** version with all fixes applied:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Special Surprise for AluSaag</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday, AluSaag!</title>
   <style>
     :root {
       --primary-pink: #ff4d6d;
       --deep-red: #c1121f;
-      --success-green: #4CAF50;
-      --glass-bg: rgba(255, 255, 255, 0.95);
-    }
-
-    * {
-      box-sizing: border-box;
+      --wa-green: #25D366;
     }
 
     body {
@@ -28,483 +18,280 @@ Here's the **production-ready** version with all fixes applied:
       justify-content: center;
       min-height: 100vh;
       margin: 0;
-      background: #1a1a1a;
-      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #121212;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       overflow-x: hidden;
-      text-align: center;
       color: white;
-      position: relative;
+      padding: 20px;
+      box-sizing: border-box;
     }
-
-    /* Skip link for accessibility */
-    .skip-link {
-      position: absolute;
-      top: -40px;
-      left: 6px;
-      background: var(--primary-pink);
-      color: white;
-      padding: 8px;
-      text-decoration: none;
-      border-radius: 4px;
-      font-size: 14px;
-      transition: top 0.3s;
-    }
-    .skip-link:focus { top: 6px; }
 
     .stage {
       display: none;
       flex-direction: column;
       align-items: center;
-      width: 90%;
-      max-width: 500px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeIn 0.6s ease-out forwards;
-      contain: layout style;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .stage.active { display: flex; }
-
-    /* Glass morphism cards */
-    .glass-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      padding: 2rem;
-      border-radius: 20px;
-      color: #333;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    /* Typography */
-    h1 { font-size: clamp(1.5rem, 5vw, 2.5rem); margin: 0 0 1rem; }
-    h2 { font-size: clamp(1.25rem, 4vw, 2rem); margin: 0 0 1rem; }
-
-    /* Form elements */
-    input {
-      padding: 1rem;
       width: 100%;
-      max-width: 300px;
-      border: 2px solid #ddd;
-      border-radius: 12px;
-      margin-bottom: 1rem;
+      max-width: 450px;
       text-align: center;
-      font-size: 16px; /* Prevents zoom on iOS */
-      transition: border-color 0.3s;
     }
 
-    input:focus {
-      outline: none;
-      border-color: var(--primary-pink);
-      box-shadow: 0 0 0 3px rgba(255,77,109,0.1);
+    /* Stage 3 is now active by default */
+    #stage-3 { display: flex; }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 35px 25px;
+      border-radius: 24px;
+      color: #333;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+      width: 100%;
+      position: relative;
+      z-index: 10;
     }
 
-    /* Buttons */
     .btn {
-      padding: 1rem 2rem;
+      padding: 15px 35px;
       border: none;
       border-radius: 50px;
-      font-weight: 600;
-      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
-      min-height: 44px;
-      min-width: 44px;
-      touch-action: manipulation;
-      transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: white;
+      font-size: 16px;
+      width: 100%;
+      max-width: 280px;
+      margin: 10px auto;
+      display: block;
     }
 
-    .btn-primary { 
+    .btn-primary {
       background: var(--primary-pink);
-      box-shadow: 0 8px 25px rgba(255,77,109,0.4);
+      color: white;
+      box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
     }
 
-    .btn-primary:hover:not(:disabled) { 
-      transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(255,77,109,0.5);
+    .btn-next {
+      display: none;
+      margin-top: 20px;
     }
 
-    .btn-secondary { 
-      background: #8d99ae;
-      box-shadow: 0 8px 25px rgba(141,153,174,0.4);
-    }
-
-    .btn-success { 
-      background: var(--success-green);
-      box-shadow: 0 8px 25px rgba(76,175,80,0.4);
-    }
-
-    .btn-whatsapp { 
-      background: #25D366;
-      box-shadow: 0 8px 25px rgba(37,211,102,0.4);
-      margin-top: 1rem;
-    }
-
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
-
-    /* Video styles */
     video {
       width: 100%;
-      border-radius: 15px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-      margin-bottom: 1.5rem;
-    }
-
-    /* Status messages */
-    .status-msg {
-      font-weight: 600;
-      margin-top: 1rem;
-      min-height: 1.5rem;
-      padding: 0.75rem;
-      border-radius: 8px;
-    }
-
-    .status-error { background: #fee; color: #c33; }
-    .status-success { background: #efe; color: #060; }
-    .status-warning { background: #ffd; color: #c90; }
-
-    /* Moving button effect */
-    .no-btn.frog {
-      position: fixed !important;
-      z-index: 1000;
-      background: var(--success-green) !important;
-      animation: bounce 0.6s ease-out;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-
-    /* Audio control */
-    .audio-toggle {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      z-index: 1000;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: white;
-      border: none;
-      font-size: 1.2rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .audio-toggle:hover { transform: scale(1.1); }
-    .audio-toggle:focus { outline: 3px solid var(--primary-pink); }
-
-    /* Kitty animation */
-    .kitty { 
-      font-size: clamp(4rem, 20vw, 6rem);
-      animation: wiggle 2s ease-in-out infinite;
-    }
-
-    @keyframes wiggle {
-      0%, 100% { transform: rotate(-3deg); }
-      50% { transform: rotate(3deg); }
-    }
-
-    /* Canvas particles (much better perf) */
-    #particle-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
+      max-width: 450px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      background: black;
       pointer-events: none;
-      z-index: 1;
+      user-select: none;
     }
 
-    /* Reduced motion support */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
+    .leaf {
+      position: fixed; top: -20px; background: var(--deep-red);
+      border-radius: 0% 80%; opacity: 0.8; z-index: 1;
+      animation: fall linear infinite;
+    }
+    
+    @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+    #audio-btn {
+      position: fixed; top: 20px; right: 20px; z-index: 100;
+      background: white; border: none; border-radius: 50%;
+      width: 45px; height: 45px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      font-size: 20px; cursor: pointer;
     }
 
-    /* Dark mode support */
-    @media (prefers-color-scheme: dark) {
-      .glass-card { background: rgba(30,30,30,0.95); color: white; }
+    .whatsapp-link {
+      background: var(--wa-green);
+      color: white;
+      text-decoration: none;
+      padding: 15px;
+      border-radius: 15px;
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    #game-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    #game-buttons .btn {
+      flex: 1;
+      min-width: 100px;
+      max-width: 120px;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      .glass-card { padding: 25px 20px; }
+      video { max-width: 100%; }
     }
   </style>
 </head>
 <body>
-  <!-- Skip link for accessibility -->
-  <a href="#final-stage" class="skip-link">Skip to birthday message</a>
 
-  <!-- Audio toggle -->
-  <button class="audio-toggle" id="audioToggle" aria-label="Toggle background music" aria-pressed="false">
-    🔇
-  </button>
+  <button id="audio-btn" style="display:none;">🔇</button>
 
-  <!-- Stage 1: Security -->
-  <div id="stage-1" class="stage active">
-    <div class="glass-card">
-      <h2>🔒 Security Check</h2>
-      <p id="security-desc">When is my birthday?<br><small>(e.g., 10 August)</small></p>
-      <input type="text" id="security-input" placeholder="Type here..." autocomplete="off">
-      <button class="btn btn-primary" id="security-submit">Submit</button>
-      <div id="status-msg" class="status-msg" role="status" aria-live="polite"></div>
-    </div>
-  </div>
+  <!-- SKIPPED: Stage 1 & 2 completely removed -->
 
-  <!-- Stage 2: First Video -->
-  <div id="stage-2" class="stage">
-    <h2>A little trip down memory lane... 🎥</h2>
-    <video id="video1" preload="metadata" playsinline poster="https://via.placeholder.com/500x300/ff4d6d/ffffff?text=Click+to+Play">
-      <source src="Vid2.mp4" type="video/mp4">
-      Your browser doesn't support video.
-    </video>
-    <button class="btn btn-primary" id="next-video2">Next ➔</button>
-  </div>
-
-  <!-- Stage 3: Second Video -->
   <div id="stage-3" class="stage">
-    <h2>One more thing! ✨</h2>
-    <video id="video2" preload="metadata" playsinline poster="https://via.placeholder.com/500x300/ff4d6d/ffffff?text=Click+to+Play">
-      <source src="BirthdaySong.mp4" type="video/mp4">
-      Your browser doesn't support video.
+    <h2 style="margin-bottom:20px;">Memories part II... ✨</h2>
+    <video id="video2" preload="metadata">
+      <source src="video2.mp4" type="video/mp4">
+      <p>Tap to play video or Next!</p>
     </video>
-    <button class="btn btn-primary" id="next-final">Next ➔</button>
+    <button id="btn-to-final" class="btn btn-primary btn-next" onclick="goToStage(4)">The Big Surprise ➔</button>
   </div>
 
-  <!-- Stage 4: Final Birthday -->
-  <div id="stage-4" class="stage" id="final-stage">
+  <div id="stage-4" class="stage">
     <div class="glass-card">
-      <div class="kitty" id="kitty" role="img" aria-label="Happy cat">😸</div>
-      <h1 id="birthday-message">Happy Birthday, AluSaag! 🎂<br>Are you giving me a birthday treat?</h1>
+      <div id="kitty" style="font-size:80px; margin-bottom:10px;">😸</div>
+      <h1 id="game-msg" style="color: #c9184a; font-size: 22px; line-height: 1.4;">
+        Happy Birthday, AluSaag! 🎂<br>I've been waiting for this... are you giving me a treat?
+      </h1>
       
-      <div id="choice-buttons">
-        <button class="btn btn-primary" id="yes-btn">YES</button>
-        <button class="btn btn-secondary" id="no-btn">Nooo</button>
+      <div id="game-buttons">
+        <button id="yesBtn" class="btn btn-primary">YES</button>
+        <button id="noBtn" class="btn" style="background:#8d99ae;">Nooo</button>
       </div>
 
-      <div id="treat-form" style="display: none;">
-        <p style="font-weight: 600;">Where are we going??</p>
-        <input type="text" id="treat-input" placeholder="Restaurant name...">
-        <button class="btn btn-success" id="submit-treat">Submit</button>
+      <div id="treat-box" style="display:none; margin-top:20px;">
+        <p style="font-weight:bold;">Where are we going then? 😋</p>
+        <input type="text" id="treatInput" placeholder="Name of the restaurant...">
+        <button id="submitTreat" class="btn" style="background:#4CAF50;">Submit RSVP</button>
       </div>
 
-      <div id="final-response"></div>
+      <div id="rsvp-container"></div>
     </div>
   </div>
 
-  <!-- Background music -->
-  <audio id="bg-music" loop preload="metadata">
-    <source src="alwayswithmepiano.mp3" type="audio/mpeg">
-  </audio>
-
-  <!-- Particle canvas -->
-  <canvas id="particle-canvas"></canvas>
+  <audio id="bg-music" loop src="alwayswithmepiano.mp3"></audio>
 
   <script>
-    class BirthdayApp {
-      constructor() {
-        this.currentStage = 1;
-        this.securityStep = 0;
-        this.noClicks = 0;
-        this.isFrogMode = false;
-        this.particles = [];
-        this.animationId = null;
-        
-        // Security answers (MOVE TO SERVER IN PRODUCTION!)
-        this.securityAnswers = ['5 may', 'tuition'];
-        
-        this.init();
+    let audioPlaying = false;
+
+    // Stage navigation (now only 3->4)
+    function goToStage(num) {
+      document.querySelectorAll('video').forEach(vid => vid.pause());
+      document.querySelectorAll('.stage').forEach(s => s.style.display = 'none');
+      
+      const nextStage = document.getElementById('stage-' + num);
+      if (nextStage) {
+        nextStage.style.display = 'flex';
       }
 
-      init() {
-        this.bindEvents();
-        this.createParticles();
-        this.updateAudioIcon();
+      if (num === 4) {
+        document.body.style.background = "url('https://images.unsplash.com/photo-1443632864897-14973fa006cf?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover";
+        document.getElementById('audio-btn').style.display = 'block';
+        startLeaves();
       }
+    }
 
-      bindEvents() {
-        // Event delegation
-        document.addEventListener('click', this.handleClick.bind(this));
-        document.addEventListener('keydown', this.handleKeydown.bind(this));
-        
-        // Video events
-        ['video1', 'video2'].forEach(id => {
-          const video = document.getElementById(id);
-          video.addEventListener('click', () => video.play().catch(() => {}));
-          video.addEventListener('ended', () => {
-            const nextBtn = document.getElementById(`next-${id === 'video1' ? 'video2' : 'final'}`);
-            nextBtn.disabled = false;
-            nextBtn.focus();
-          });
-        });
+    // FIXED VIDEO 2 HANDLING
+    const video2 = document.getElementById('video2');
+    const btnToFinal = document.getElementById('btn-to-final');
+    
+    video2.addEventListener('ended', () => {
+      btnToFinal.style.display = 'block';
+    });
+    
+    // Mobile/touch friendly play
+    video2.addEventListener('click', () => video2.play());
+    video2.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (video2.paused) video2.play();
+    });
+    
+    // 30s fallback
+    setTimeout(() => {
+      if (video2.ended || video2.paused) {
+        btnToFinal.style.display = 'block';
       }
+    }, 30000);
 
-      handleClick(e) {
-        const { target } = e;
-        
-        // Security
-        if (target.id === 'security-submit') this.checkSecurity();
-        
-        // Stage navigation
-        if (target.id === 'next-video2') this.goToStage(3);
-        if (target.id === 'next-final') this.goToStage(4);
-        
-        // Birthday choices
-        if (target.id === 'yes-btn') this.handleYes();
-        if (target.id === 'no-btn') this.handleNo();
-        if (target.id === 'submit-treat') this.handleTreatSubmit();
-        
-        // Audio toggle
-        if (target.id === 'audioToggle') this.toggleAudio();
+    // BIRTHDAY GAME LOGIC
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    let noClicks = 0;
+    let isJumping = false;
+
+    function moveNo() {
+      if (!isJumping) return;
+      noBtn.style.position = 'fixed';
+      noBtn.style.zIndex = '1000';
+      noBtn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+      noBtn.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+    }
+
+    noBtn.addEventListener('click', () => {
+      if (isJumping) return;
+      noClicks++;
+      if (noClicks === 1) {
+        document.getElementById('game-msg').innerText = "Taras khao na mujh pe... 🥺";
+        document.getElementById('kitty').innerText = "🥺";
       }
-
-      handleKeydown(e) {
-        if (e.key === 'Enter' && document.activeElement.id === 'security-input') {
-          this.checkSecurity();
-        }
+      if (noClicks >= 3) {
+        isJumping = true;
+        noBtn.innerHTML = "🐸 NO";
+        noBtn.style.background = "#4CAF50";
+        moveNo();
       }
+    });
 
-      checkSecurity() {
-        const input = document.getElementById('security-input');
-        const status = document.getElementById('status-msg');
-        const desc = document.getElementById('security-desc');
-        const answer = input.value.toLowerCase().trim();
+    noBtn.addEventListener('mouseenter', moveNo);
+    noBtn.addEventListener('touchstart', (e) => { 
+      if(isJumping) { e.preventDefault(); moveNo(); } 
+    });
 
-        if (this.securityStep >= 2) return;
+    yesBtn.addEventListener('click', () => {
+      document.getElementById('game-buttons').style.display = 'none';
+      document.getElementById('game-msg').innerHTML = "I knew you'd say yes! ❤️<br>You're the best, AluSaag.";
+      document.getElementById('kitty').innerText = "🥔😻🥔";
+      document.getElementById('treat-box').style.display = 'block';
+    });
 
-        if (answer === this.securityAnswers[this.securityStep]) {
-          this.securityStep++;
-          
-          if (this.securityStep === 1) {
-            status.textContent = "Hmm... correct. But I'm not sure this is you.";
-            status.className = 'status-msg status-warning';
-            input.value = '';
-            
-            setTimeout(() => {
-              desc.innerHTML = 'Where did we first meet?<br><small>(Hint: tuition)</small>';
-              status.textContent = '';
-            }, 2000);
-          } else {
-            status.textContent = "It's definitely you, Alisha... welcome! 🎉";
-            status.className = 'status-msg status-success';
-            input.style.display = 'none';
-            document.getElementById('security-submit').style.display = 'none';
-            
-            setTimeout(() => this.goToStage(2), 2500);
-          }
-        } else {
-          status.textContent = this.securityStep === 0 
-            ? 'Wrong date! Try again.' 
-            : 'Wrong place! Are you an imposter?';
-          status.className = 'status-msg status-error';
-          input.value = '';
-          input.focus();
-        }
+    document.getElementById('submitTreat').addEventListener('click', () => {
+      const val = document.getElementById('treatInput').value.trim();
+      if (!val) {
+        alert("You have to tell me where we're going!");
+        return;
       }
+      const link = `https://wa.me/917856978442?text=Okay fine! I'm taking you to ${encodeURIComponent(val)} 🎂`;
+      document.getElementById('treat-box').style.display = 'none';
+      document.getElementById('rsvp-container').innerHTML = `<a href="${link}" target="_blank" class="whatsapp-link">Confirm on WhatsApp 📲</a>`;
+    });
 
-      goToStage(stage) {
-        document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
-        document.getElementById(`stage-${stage}`).classList.add('active');
-        this.currentStage = stage;
-        
-        if (stage === 4) {
-          document.body.style.background = 
-            "url('https://images.unsplash.com/photo-1443632864897-14973fa006cf?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover";
-          this.startParticles();
-        }
+    // LEAVES EFFECT
+    function startLeaves() {
+      for (let i = 0; i < 25; i++) {
+        const leaf = document.createElement('div');
+        leaf.className = 'leaf';
+        leaf.style.left = Math.random() * 100 + 'vw';
+        leaf.style.width = leaf.style.height = (Math.random() * 15 + 10) + 'px';
+        leaf.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        leaf.style.animationDelay = Math.random() * 5 + 's';
+        document.body.appendChild(leaf);
       }
+    }
 
-      handleNo() {
-        this.noClicks++;
-        const noBtn = document.getElementById('no-btn');
-        const message = document.getElementById('birthday-message');
-
-        if (this.noClicks === 1) {
-          message.innerHTML = 'Taras khao na mujh pe... 🥺';
-          return;
-        }
-
-        if (this.noClicks >= 3 && !this.isFrogMode) {
-          this.isFrogMode = true;
-          noBtn.textContent = '🐸 NO';
-          noBtn.classList.add('frog');
-          this.moveFrogButton();
-        }
+    // FIXED AUDIO TOGGLE
+    const audio = document.getElementById('bg-music');
+    const audioBtn = document.getElementById('audio-btn');
+    
+    audioBtn.onclick = function() {
+      if (audio.paused) { 
+        audio.play().catch(e => console.log('Audio play failed'));
+        this.innerText = "🔊";
+        audioPlaying = true;
+      } else { 
+        audio.pause(); 
+        this.innerText = "🔇";
+        audioPlaying = false;
       }
-
-      moveFrogButton() {
-        const noBtn = document.getElementById('no-btn');
-        const rect = noBtn.getBoundingClientRect();
-        
-        noBtn.style.left = `${Math.random() * (window.innerWidth - rect.width)}px`;
-        noBtn.style.top = `${Math.random() * (window.innerHeight - rect.height)}px`;
-      }
-
-      handleYes() {
-        if (!this.isFrogMode) {
-          alert("Try the No button first, it's funny! 😈");
-          return;
-        }
-        
-        document.getElementById('choice-buttons').style.display = 'none';
-        document.getElementById('birthday-message').innerHTML = "I knew you'd say yes! ❤️";
-        document.getElementById('treat-form').style.display = 'block';
-        document.getElementById('treat-input').focus();
-      }
-
-      handleTreatSubmit() {
-        const place = document.getElementById('treat-input').value.trim();
-        if (!place) {
-          alert('You gotta tell me the place!');
-          return;
-        }
-
-        document.getElementById('treat-form').style.display = 'none';
-        const whatsappUrl = `https://wa.me/917856978442?text=Okay%20fine!%20I'm%20taking%20you%20to%20${encodeURIComponent(place)}%20🎂`;
-        
-        document.getElementById('final-response').innerHTML = `
-          <p style="font-size: 1.1rem; margin-bottom: 1rem;">Perfect! Can't wait! 🎉</p>
-          <a href="${whatsappUrl}" target="_blank" class="btn btn-whatsapp" rel="noopener">
-            Send RSVP via WhatsApp 📲
-          </a>
-        `;
-      }
-
-      toggleAudio() {
-        const audio = document.getElementById('bg-music');
-        const btn = document.getElementById('audioToggle');
-        
-        if (audio.paused) {
-          audio.play().catch(() => {});
-          btn.textContent = '🔊';
-          btn.setAttribute('aria-pressed', 'true');
-        } else {
-          audio.pause();
-          btn.textContent = '🔇';
-          btn.setAttribute('aria-pressed', 'false');
-        }
-      }
-
-      updateAudioIcon() {
-        const btn = document.getElementById('audioToggle');
-        btn.textContent = '🔇';
-        btn.setAttribute('aria-pressed', 'false');
-      }
-
-      createParticles() {
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
+    };
+  </script>
+</body>
+</html>
