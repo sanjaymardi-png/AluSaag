@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Happy Birthday, AluSaag!</title>
+  <title>A Special Surprise for AluSaag</title>
   <style>
     :root {
       --primary-pink: #ff4d6d;
       --deep-red: #c1121f;
-      --wa-green: #25D366;
+      --glass: rgba(255, 255, 255, 0.9);
     }
 
     body {
@@ -18,315 +18,242 @@
       justify-content: center;
       min-height: 100vh;
       margin: 0;
-      background-color: #121212; /* Cinematic dark background */
+      background: #1a1a1a;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       overflow-x: hidden;
+      text-align: center;
       color: white;
+      transition: background 1s ease;
     }
 
-    /* BUG FIX: Removed the opacity animations entirely. 
-       Now it relies purely on instantly showing/hiding the boxes. 
-    */
     .stage {
-      display: none; /* Hidden by default */
+      display: none;
       flex-direction: column;
       align-items: center;
       width: 90%;
-      max-width: 450px;
-      text-align: center;
+      max-width: 500px;
+      animation: fadeIn 0.8s ease-out;
     }
 
-    /* UI Components */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .glass-card {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 35px 25px;
-      border-radius: 24px;
+      background: var(--glass);
+      padding: 30px;
+      border-radius: 20px;
       color: #333;
       box-shadow: 0 15px 35px rgba(0,0,0,0.4);
       width: 100%;
-      position: relative;
-      z-index: 10;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      margin-bottom: 20px;
+      background: black;
     }
 
     input {
-      padding: 14px;
+      padding: 12px;
       width: 80%;
       border: 2px solid #ddd;
-      border-radius: 12px;
-      margin: 15px 0;
+      border-radius: 10px;
+      margin-bottom: 15px;
       font-size: 16px;
-      text-align: center;
       outline: none;
     }
 
-    input:focus { border-color: var(--primary-pink); }
-
-    .btn {
+    .next-btn, .action-btn {
       padding: 15px 35px;
+      background: var(--primary-pink);
+      color: white;
       border: none;
       border-radius: 50px;
       font-weight: bold;
       cursor: pointer;
       font-size: 16px;
+      transition: transform 0.2s;
     }
 
-    .btn-primary {
-      background: var(--primary-pink);
-      color: white;
-      box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
-    }
+    .next-btn:hover { transform: scale(1.05); }
 
-    .btn-next {
-      display: none; /* Hidden until video ends */
-      margin-top: 20px;
-    }
-
-    /* Video Styling */
-    video {
-      width: 100%;
-      border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      background: black;
-    }
-
-    /* Final Stage Decorations */
+    /* Floating Leaves */
     .leaf {
-      position: fixed; top: -20px; background: var(--deep-red);
-      border-radius: 0% 80%; opacity: 0.8; z-index: 1;
-      animation: fall linear infinite;
+      position: fixed; top: -50px; 
+      background: var(--deep-red);
+      border-radius: 0% 80%;
+      opacity: 0.6;
+      pointer-events: none;
+      animation: fall linear forwards;
     }
-    @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(540deg); }
+    }
 
     #audio-btn {
-      position: fixed; top: 20px; right: 20px; z-index: 100;
+      position: fixed; top: 20px; right: 20px; z-index: 1000;
       background: white; border: none; border-radius: 50%;
-      width: 45px; height: 45px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    .whatsapp-link {
-      background: var(--wa-green);
-      color: white;
-      text-decoration: none;
-      padding: 15px;
-      border-radius: 15px;
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
+      width: 45px; height: 45px; cursor: pointer; font-size: 20px;
     }
   </style>
 </head>
 <body>
 
-  <button id="audio-btn" style="display:none;">🔇</button>
+  <audio id="bg-music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+  <button id="audio-btn" onclick="toggleMusic()">🎵</button>
 
   <div id="stage-1" class="stage" style="display: flex;">
     <div class="glass-card">
-      <h2 id="sec-title">🔒 Security Check</h2>
-      <p id="sec-desc">When is my birthday?<br><small>(e.g. 10 August)</small></p>
-      <input type="text" id="passInput" placeholder="Answer here...">
+      <h2 id="sec-title">🔒 Verification Required</h2>
+      <p id="sec-desc">When is my birthday?<br><small>(e.g., 10 August)</small></p>
+      <input type="text" id="passInput" placeholder="Type here...">
       <br>
-      <button onclick="handleSecurity()" class="btn btn-primary" id="sec-btn">Verify</button>
-      <p id="sec-status" style="margin-top:15px; font-weight:bold; min-height:20px;"></p>
+      <button onclick="checkPass()" class="next-btn">Submit</button>
+      <p id="status-msg"></p>
     </div>
   </div>
 
   <div id="stage-2" class="stage">
-    <h2 style="margin-bottom:20px;">Memories part I... 🎥</h2>
+    <h2>A little trip down memory lane... 🎥</h2>
     <video id="video1" controls>
-      <source src="video1.mp4" type="video/mp4">
+      <source src="Vid2.mp4" type="video/mp4">
     </video>
-    <button id="btn-to-v2" class="btn btn-primary btn-next" onclick="goToStage(3)">Next Thing ➔</button>
+    <button id="btn-v1" class="next-btn" style="display:none;" onclick="goToStage(3)">Next Thing ➔</button>
   </div>
 
   <div id="stage-3" class="stage">
-    <h2 style="margin-bottom:20px;">Memories part II... ✨</h2>
+    <h2>One more thing! ✨</h2>
     <video id="video2" controls>
-      <source src="video2.mp4" type="video/mp4">
+      <source src="BirthdaySong.mp4" type="video/mp4">
     </video>
-    <button id="btn-to-final" class="btn btn-primary btn-next" onclick="goToStage(4)">The Big Surprise ➔</button>
+    <button id="btn-v2" class="next-btn" style="display:none;" onclick="goToStage(4)">The Big Surprise ➔</button>
   </div>
 
   <div id="stage-4" class="stage">
     <div class="glass-card">
-      <div id="kitty" style="font-size:80px; margin-bottom:10px;">😸</div>
-      <h1 id="game-msg" style="color: #c9184a; font-size: 22px; line-height: 1.4;">
-        Happy Birthday, AluSaag! 🎂<br>I've been waiting for this... are you giving me a treat?
-      </h1>
+      <div style="font-size:70px">😸</div>
+      <h1 id="final-msg" style="color:#c9184a; font-size:22px;">Happy Birthday, AluSaag! 🎂<br>Are you giving me a treat?</h1>
       
-      <div id="game-buttons" style="display:flex; gap:15px; justify-content:center; margin-top:20px; min-height:60px;">
-        <button id="yesBtn" class="btn btn-primary">YES</button>
-        <button id="noBtn" class="btn" style="background:#8d99ae; color:white;">Nooo</button>
+      <div id="buttonContainer">
+        <button id="yesBtn" class="action-btn">YES</button>
+        <button id="noBtn" class="action-btn" style="background:#8d99ae;">Nooo</button>
       </div>
 
-      <div id="treat-box" style="display:none; margin-top:20px;">
-        <p style="font-weight:bold;">Where are we going then? 😋</p>
-        <input type="text" id="treatInput" placeholder="Name of the restaurant...">
-        <button id="submitTreat" class="btn btn-primary" style="background:#4CAF50; width:100%;">Submit RSVP</button>
+      <div id="captchaArea" style="display:none; margin-top:20px;">
+        <p><b>YAY! Where are we going?</b></p>
+        <input type="text" id="treatAnswer" placeholder="Restaurant name...">
+        <br>
+        <button onclick="sendRSVP()" class="action-btn" style="background:#4CAF50;">Confirm & Send 📲</button>
       </div>
-
-      <div id="rsvp-container"></div>
     </div>
-    
-    <button id="fakeBtn" style="display:none; margin-top:25px; background:rgba(255,255,255,0.2); border:1px solid white; color:white; padding:8px 20px; border-radius:50px; font-size:12px; z-index:10;">Complain to Isha & Saras</button>
   </div>
 
-  <audio id="bg-music" loop src="alwayswithmepiano.mp3"></audio>
-
   <script>
-    // --- 1. CONFIGURE YOUR ANSWERS HERE ---
-    const CORRECT_BDAY = "10 august"; 
-    const CORRECT_PLACE = "central park"; 
-    
-    let currentStep = 1;
+    let securityStep = 1;
+    const correctBirthday = "5 May"; 
+    const correctPlace = "Tuition"; 
 
-    // --- 2. FAIL-PROOF STAGE NAVIGATION LOGIC ---
     function goToStage(num) {
-      // Safely pause any playing videos
-      document.querySelectorAll('video').forEach(vid => vid.pause());
-
-      // Instantly hide all stages
-      document.querySelectorAll('.stage').forEach(s => {
-        s.style.display = 'none';
-      });
+      document.querySelectorAll('.stage').forEach(s => s.style.display = 'none');
+      const next = document.getElementById(`stage-${num}`);
+      next.style.display = 'flex';
       
-      // Instantly show the correct stage
-      const nextStage = document.getElementById('stage-' + num);
-      if (nextStage) {
-        nextStage.style.display = 'flex';
-      }
-
-      // If it's stage 4, trigger the background change and leaves
-      if (num === 4) {
-        document.body.style.background = "url('https://images.unsplash.com/photo-1443632864897-14973fa006cf?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover";
-        document.getElementById('audio-btn').style.display = 'block';
+      if(num === 4) {
+        document.body.style.background = "#ffb3c1";
         startLeaves();
       }
     }
 
-    // --- 3. SECURITY GATE LOGIC ---
-    function handleSecurity() {
-      const input = document.getElementById('passInput');
-      const val = input.value.toLowerCase().trim();
-      const status = document.getElementById('sec-status');
+    function checkPass() {
+      const val = document.getElementById('passInput').value.toLowerCase().trim();
+      const status = document.getElementById('status-msg');
       const desc = document.getElementById('sec-desc');
-      const btn = document.getElementById('sec-btn');
+      const title = document.getElementById('sec-title');
 
-      if (currentStep === 1) {
-        if (val === CORRECT_BDAY) {
-          status.style.color = "#d90429";
-          status.innerText = "Hmm... correct. But I'm not sure this is you.";
-          input.value = "";
-          currentStep = 2;
-          
-          setTimeout(() => {
-            status.innerText = "";
-            desc.innerHTML = "One more question...<br>Where did we first meet?<br><small>(Park or Cafe name)</small>";
-          }, 1500);
+      if (securityStep === 1) {
+        if (val === correctBirthday) {
+          securityStep = 2;
+          document.getElementById('passInput').value = "";
+          title.innerText = "🕵️ Just making sure...";
+          desc.innerHTML = "Where did we first meet?<br><small>(Hint: The Park)</small>";
+          status.innerText = "";
         } else {
-          status.style.color = "red";
           status.innerText = "Wrong date! Try again.";
-        }
-      } 
-      else if (currentStep === 2) {
-        if (val === CORRECT_PLACE) {
-          status.style.color = "#4CAF50";
-          status.innerText = "Oh! It's definitely you, Alisha... welcome. 🎉";
-          input.style.display = "none";
-          btn.style.display = "none";
-          
-          setTimeout(() => goToStage(2), 2000);
-        } else {
           status.style.color = "red";
-          status.innerText = "Wrong place! Who are you??";
+        }
+      } else {
+        if (val === correctPlace) {
+          goToStage(2);
+          try { document.getElementById('bg-music').play(); } catch(e){}
+        } else {
+          status.innerText = "Nope! That's not right.";
         }
       }
     }
 
-    // Allow pressing "Enter" key
-    document.getElementById('passInput').addEventListener('keypress', (e) => { 
-      if(e.key === 'Enter') handleSecurity(); 
-    });
+    // Video Listeners
+    document.getElementById('video1').onended = () => document.getElementById('btn-v1').style.display = 'block';
+    document.getElementById('video2').onended = () => document.getElementById('btn-v2').style.display = 'block';
 
-    // --- 4. VIDEO END LISTENERS ---
-    document.getElementById('video1').addEventListener('ended', () => {
-      document.getElementById('btn-to-v2').style.display = 'inline-block';
-    });
-    
-    document.getElementById('video2').addEventListener('ended', () => {
-      document.getElementById('btn-to-final').style.display = 'inline-block';
-    });
-
-    // --- 5. BIRTHDAY GAME LOGIC ---
+    // The No Button Logic
     const noBtn = document.getElementById('noBtn');
-    const yesBtn = document.getElementById('yesBtn');
-    let noClicks = 0;
-    let isJumping = false;
+    let noCount = 0;
 
-    function moveNo() {
-      if (!isJumping) return;
-      noBtn.style.position = 'fixed';
-      noBtn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
-      noBtn.style.top = Math.random() * (window.innerHeight - 100) + 'px';
-    }
+    noBtn.addEventListener('mouseover', () => {
+      if (noCount > 2) {
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 100);
+        noBtn.style.position = 'fixed';
+        noBtn.style.left = x + 'px';
+        noBtn.style.top = y + 'px';
+      }
+    });
 
     noBtn.addEventListener('click', () => {
-      if (isJumping) return;
-      noClicks++;
-      if (noClicks === 1) {
-        document.getElementById('game-msg').innerText = "Taras khao na mujh pe... 🥺";
-        document.getElementById('kitty').innerText = "🥺";
-        document.getElementById('fakeBtn').style.display = 'block';
-      }
-      if (noClicks >= 3) {
-        isJumping = true;
-        noBtn.innerHTML = "🐸 NO";
-        noBtn.style.background = "#4CAF50";
-        moveNo();
+      noCount++;
+      if (noCount === 1) document.getElementById('final-msg').innerText = "Taras khao na mujh pe... 🥺";
+      if (noCount === 3) noBtn.innerText = "🐸 NO";
+    });
+
+    document.getElementById('yesBtn').addEventListener('click', () => {
+      if (noCount < 3) {
+        alert("Try clicking 'No' first, it's funny! 😈");
+      } else {
+        document.getElementById('buttonContainer').style.display = 'none';
+        document.getElementById('captchaArea').style.display = 'block';
+        document.getElementById('final-msg').innerText = "I knew it! ❤️";
       }
     });
 
-    noBtn.addEventListener('mouseenter', moveNo);
-    noBtn.addEventListener('touchstart', (e) => { if(isJumping) { e.preventDefault(); moveNo(); } });
-
-    yesBtn.addEventListener('click', () => {
-      document.getElementById('game-buttons').style.display = 'none';
-      document.getElementById('game-msg').innerHTML = "I knew you'd say yes! ❤️<br>You're the best, AluSaag.";
-      document.getElementById('kitty').innerText = "🥔😻🥔";
-      document.getElementById('treat-box').style.display = 'block';
-      document.getElementById('fakeBtn').style.display = 'none';
-    });
-
-    document.getElementById('submitTreat').addEventListener('click', () => {
-      const val = document.getElementById('treatInput').value;
-      if (!val) {
-        alert("You have to tell me where we're going!");
-        return;
-      }
-      const link = `https://wa.me/917856978442?text=Okay fine! I'm taking you to ${encodeURIComponent(val)} 🎂`;
-      document.getElementById('treat-box').style.display = 'none';
-      document.getElementById('rsvp-container').innerHTML = `<a href="${link}" target="_blank" class="whatsapp-link">Confirm on WhatsApp 📲</a>`;
-    });
-
-    // --- 6. EXTRAS (Leaves, Music) ---
-    function startLeaves() {
-      for (let i = 0; i < 25; i++) {
-        const leaf = document.createElement('div');
-        leaf.className = 'leaf';
-        leaf.style.left = Math.random() * 100 + 'vw';
-        leaf.style.width = leaf.style.height = (Math.random() * 15 + 10) + 'px';
-        leaf.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        leaf.style.animationDelay = Math.random() * 5 + 's';
-        document.body.appendChild(leaf);
-      }
+    function sendRSVP() {
+      const place = document.getElementById('treatAnswer').value;
+      if(!place) return alert("Tell me the place!");
+      window.open(`https://wa.me/917856978442?text=Happy Birthday! I'm taking you to ${encodeURIComponent(place)} 🎂`);
     }
 
-    const audio = document.getElementById('bg-music');
-    document.getElementById('audio-btn').onclick = function() {
-      if (audio.paused) { audio.play(); this.innerText = "🔊"; }
-      else { audio.pause(); this.innerText = "🔇"; }
-    };
-    
-    document.getElementById('fakeBtn').onclick = () => alert("Numbers are blocked for the day! 📵");
+    function toggleMusic() {
+      const m = document.getElementById('bg-music');
+      if (m.paused) m.play(); else m.pause();
+    }
+
+    function startLeaves() {
+      for(let i=0; i<25; i++) {
+        let l = document.createElement('div');
+        l.className = 'leaf';
+        l.style.left = Math.random() * 100 + 'vw';
+        l.style.width = l.style.height = (Math.random()*15+10)+'px';
+        l.style.animationDuration = (Math.random()*3+2)+'s';
+        l.style.animationDelay = Math.random()*2+'s';
+        document.body.appendChild(l);
+      }
+    }
   </script>
 </body>
 </html>
