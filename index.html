@@ -18,26 +18,25 @@
       justify-content: center;
       min-height: 100vh;
       margin: 0;
-      background-color: #121212;
+      background-color: #121212; /* Cinematic dark background */
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       overflow-x: hidden;
       color: white;
-      padding: 20px;
-      box-sizing: border-box;
     }
 
+    /* BUG FIX: Removed the opacity animations entirely. 
+       Now it relies purely on instantly showing/hiding the boxes. 
+    */
     .stage {
-      display: none;
+      display: none; /* Hidden by default */
       flex-direction: column;
       align-items: center;
-      width: 100%;
+      width: 90%;
       max-width: 450px;
       text-align: center;
     }
 
-    /* Stage 3 is now active by default */
-    #stage-3 { display: flex; }
-
+    /* UI Components */
     .glass-card {
       background: rgba(255, 255, 255, 0.95);
       padding: 35px 25px;
@@ -49,6 +48,19 @@
       z-index: 10;
     }
 
+    input {
+      padding: 14px;
+      width: 80%;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      margin: 15px 0;
+      font-size: 16px;
+      text-align: center;
+      outline: none;
+    }
+
+    input:focus { border-color: var(--primary-pink); }
+
     .btn {
       padding: 15px 35px;
       border: none;
@@ -56,10 +68,6 @@
       font-weight: bold;
       cursor: pointer;
       font-size: 16px;
-      width: 100%;
-      max-width: 280px;
-      margin: 10px auto;
-      display: block;
     }
 
     .btn-primary {
@@ -69,33 +77,30 @@
     }
 
     .btn-next {
-      display: none;
+      display: none; /* Hidden until video ends */
       margin-top: 20px;
     }
 
+    /* Video Styling */
     video {
       width: 100%;
-      max-width: 450px;
       border-radius: 18px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.6);
       background: black;
-      pointer-events: none;
-      user-select: none;
     }
 
+    /* Final Stage Decorations */
     .leaf {
       position: fixed; top: -20px; background: var(--deep-red);
       border-radius: 0% 80%; opacity: 0.8; z-index: 1;
       animation: fall linear infinite;
     }
-    
     @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
 
     #audio-btn {
       position: fixed; top: 20px; right: 20px; z-index: 100;
       background: white; border: none; border-radius: 50%;
       width: 45px; height: 45px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      font-size: 20px; cursor: pointer;
     }
 
     .whatsapp-link {
@@ -107,27 +112,6 @@
       display: block;
       margin-top: 15px;
       font-weight: bold;
-      box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
-    }
-
-    #game-buttons {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-
-    #game-buttons .btn {
-      flex: 1;
-      min-width: 100px;
-      max-width: 120px;
-    }
-
-    @media (max-width: 480px) {
-      body { padding: 10px; }
-      .glass-card { padding: 25px 20px; }
-      video { max-width: 100%; }
     }
   </style>
 </head>
@@ -135,13 +119,29 @@
 
   <button id="audio-btn" style="display:none;">🔇</button>
 
-  <!-- SKIPPED: Stage 1 & 2 completely removed -->
+  <div id="stage-1" class="stage" style="display: flex;">
+    <div class="glass-card">
+      <h2 id="sec-title">🔒 Security Check</h2>
+      <p id="sec-desc">When is my birthday?<br><small>(e.g. 10 August)</small></p>
+      <input type="text" id="passInput" placeholder="Answer here...">
+      <br>
+      <button onclick="handleSecurity()" class="btn btn-primary" id="sec-btn">Verify</button>
+      <p id="sec-status" style="margin-top:15px; font-weight:bold; min-height:20px;"></p>
+    </div>
+  </div>
+
+  <div id="stage-2" class="stage">
+    <h2 style="margin-bottom:20px;">Memories part I... 🎥</h2>
+    <video id="video1" controls>
+      <source src="video1.mp4" type="video/mp4">
+    </video>
+    <button id="btn-to-v2" class="btn btn-primary btn-next" onclick="goToStage(3)">Next Thing ➔</button>
+  </div>
 
   <div id="stage-3" class="stage">
     <h2 style="margin-bottom:20px;">Memories part II... ✨</h2>
-    <video id="video2" preload="metadata">
+    <video id="video2" controls>
       <source src="video2.mp4" type="video/mp4">
-      <p>Tap to play video or Next!</p>
     </video>
     <button id="btn-to-final" class="btn btn-primary btn-next" onclick="goToStage(4)">The Big Surprise ➔</button>
   </div>
@@ -153,36 +153,49 @@
         Happy Birthday, AluSaag! 🎂<br>I've been waiting for this... are you giving me a treat?
       </h1>
       
-      <div id="game-buttons">
+      <div id="game-buttons" style="display:flex; gap:15px; justify-content:center; margin-top:20px; min-height:60px;">
         <button id="yesBtn" class="btn btn-primary">YES</button>
-        <button id="noBtn" class="btn" style="background:#8d99ae;">Nooo</button>
+        <button id="noBtn" class="btn" style="background:#8d99ae; color:white;">Nooo</button>
       </div>
 
       <div id="treat-box" style="display:none; margin-top:20px;">
         <p style="font-weight:bold;">Where are we going then? 😋</p>
         <input type="text" id="treatInput" placeholder="Name of the restaurant...">
-        <button id="submitTreat" class="btn" style="background:#4CAF50;">Submit RSVP</button>
+        <button id="submitTreat" class="btn btn-primary" style="background:#4CAF50; width:100%;">Submit RSVP</button>
       </div>
 
       <div id="rsvp-container"></div>
     </div>
+    
+    <button id="fakeBtn" style="display:none; margin-top:25px; background:rgba(255,255,255,0.2); border:1px solid white; color:white; padding:8px 20px; border-radius:50px; font-size:12px; z-index:10;">Complain to Isha & Saras</button>
   </div>
 
   <audio id="bg-music" loop src="alwayswithmepiano.mp3"></audio>
 
   <script>
-    let audioPlaying = false;
+    // --- 1. CONFIGURE YOUR ANSWERS HERE ---
+    const CORRECT_BDAY = "10 august"; 
+    const CORRECT_PLACE = "central park"; 
+    
+    let currentStep = 1;
 
-    // Stage navigation (now only 3->4)
+    // --- 2. FAIL-PROOF STAGE NAVIGATION LOGIC ---
     function goToStage(num) {
+      // Safely pause any playing videos
       document.querySelectorAll('video').forEach(vid => vid.pause());
-      document.querySelectorAll('.stage').forEach(s => s.style.display = 'none');
+
+      // Instantly hide all stages
+      document.querySelectorAll('.stage').forEach(s => {
+        s.style.display = 'none';
+      });
       
+      // Instantly show the correct stage
       const nextStage = document.getElementById('stage-' + num);
       if (nextStage) {
         nextStage.style.display = 'flex';
       }
 
+      // If it's stage 4, trigger the background change and leaves
       if (num === 4) {
         document.body.style.background = "url('https://images.unsplash.com/photo-1443632864897-14973fa006cf?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover";
         document.getElementById('audio-btn').style.display = 'block';
@@ -190,29 +203,60 @@
       }
     }
 
-    // FIXED VIDEO 2 HANDLING
-    const video2 = document.getElementById('video2');
-    const btnToFinal = document.getElementById('btn-to-final');
-    
-    video2.addEventListener('ended', () => {
-      btnToFinal.style.display = 'block';
-    });
-    
-    // Mobile/touch friendly play
-    video2.addEventListener('click', () => video2.play());
-    video2.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      if (video2.paused) video2.play();
-    });
-    
-    // 30s fallback
-    setTimeout(() => {
-      if (video2.ended || video2.paused) {
-        btnToFinal.style.display = 'block';
-      }
-    }, 30000);
+    // --- 3. SECURITY GATE LOGIC ---
+    function handleSecurity() {
+      const input = document.getElementById('passInput');
+      const val = input.value.toLowerCase().trim();
+      const status = document.getElementById('sec-status');
+      const desc = document.getElementById('sec-desc');
+      const btn = document.getElementById('sec-btn');
 
-    // BIRTHDAY GAME LOGIC
+      if (currentStep === 1) {
+        if (val === CORRECT_BDAY) {
+          status.style.color = "#d90429";
+          status.innerText = "Hmm... correct. But I'm not sure this is you.";
+          input.value = "";
+          currentStep = 2;
+          
+          setTimeout(() => {
+            status.innerText = "";
+            desc.innerHTML = "One more question...<br>Where did we first meet?<br><small>(Park or Cafe name)</small>";
+          }, 1500);
+        } else {
+          status.style.color = "red";
+          status.innerText = "Wrong date! Try again.";
+        }
+      } 
+      else if (currentStep === 2) {
+        if (val === CORRECT_PLACE) {
+          status.style.color = "#4CAF50";
+          status.innerText = "Oh! It's definitely you, Alisha... welcome. 🎉";
+          input.style.display = "none";
+          btn.style.display = "none";
+          
+          setTimeout(() => goToStage(2), 2000);
+        } else {
+          status.style.color = "red";
+          status.innerText = "Wrong place! Who are you??";
+        }
+      }
+    }
+
+    // Allow pressing "Enter" key
+    document.getElementById('passInput').addEventListener('keypress', (e) => { 
+      if(e.key === 'Enter') handleSecurity(); 
+    });
+
+    // --- 4. VIDEO END LISTENERS ---
+    document.getElementById('video1').addEventListener('ended', () => {
+      document.getElementById('btn-to-v2').style.display = 'inline-block';
+    });
+    
+    document.getElementById('video2').addEventListener('ended', () => {
+      document.getElementById('btn-to-final').style.display = 'inline-block';
+    });
+
+    // --- 5. BIRTHDAY GAME LOGIC ---
     const noBtn = document.getElementById('noBtn');
     const yesBtn = document.getElementById('yesBtn');
     let noClicks = 0;
@@ -221,7 +265,6 @@
     function moveNo() {
       if (!isJumping) return;
       noBtn.style.position = 'fixed';
-      noBtn.style.zIndex = '1000';
       noBtn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
       noBtn.style.top = Math.random() * (window.innerHeight - 100) + 'px';
     }
@@ -232,6 +275,7 @@
       if (noClicks === 1) {
         document.getElementById('game-msg').innerText = "Taras khao na mujh pe... 🥺";
         document.getElementById('kitty').innerText = "🥺";
+        document.getElementById('fakeBtn').style.display = 'block';
       }
       if (noClicks >= 3) {
         isJumping = true;
@@ -242,19 +286,18 @@
     });
 
     noBtn.addEventListener('mouseenter', moveNo);
-    noBtn.addEventListener('touchstart', (e) => { 
-      if(isJumping) { e.preventDefault(); moveNo(); } 
-    });
+    noBtn.addEventListener('touchstart', (e) => { if(isJumping) { e.preventDefault(); moveNo(); } });
 
     yesBtn.addEventListener('click', () => {
       document.getElementById('game-buttons').style.display = 'none';
       document.getElementById('game-msg').innerHTML = "I knew you'd say yes! ❤️<br>You're the best, AluSaag.";
       document.getElementById('kitty').innerText = "🥔😻🥔";
       document.getElementById('treat-box').style.display = 'block';
+      document.getElementById('fakeBtn').style.display = 'none';
     });
 
     document.getElementById('submitTreat').addEventListener('click', () => {
-      const val = document.getElementById('treatInput').value.trim();
+      const val = document.getElementById('treatInput').value;
       if (!val) {
         alert("You have to tell me where we're going!");
         return;
@@ -264,7 +307,7 @@
       document.getElementById('rsvp-container').innerHTML = `<a href="${link}" target="_blank" class="whatsapp-link">Confirm on WhatsApp 📲</a>`;
     });
 
-    // LEAVES EFFECT
+    // --- 6. EXTRAS (Leaves, Music) ---
     function startLeaves() {
       for (let i = 0; i < 25; i++) {
         const leaf = document.createElement('div');
@@ -277,21 +320,13 @@
       }
     }
 
-    // FIXED AUDIO TOGGLE
     const audio = document.getElementById('bg-music');
-    const audioBtn = document.getElementById('audio-btn');
-    
-    audioBtn.onclick = function() {
-      if (audio.paused) { 
-        audio.play().catch(e => console.log('Audio play failed'));
-        this.innerText = "🔊";
-        audioPlaying = true;
-      } else { 
-        audio.pause(); 
-        this.innerText = "🔇";
-        audioPlaying = false;
-      }
+    document.getElementById('audio-btn').onclick = function() {
+      if (audio.paused) { audio.play(); this.innerText = "🔊"; }
+      else { audio.pause(); this.innerText = "🔇"; }
     };
+    
+    document.getElementById('fakeBtn').onclick = () => alert("Numbers are blocked for the day! 📵");
   </script>
 </body>
 </html>
