@@ -157,8 +157,8 @@
 
   <script>
     let securityStep = 1;
-    const correctBirthday = "14 May"; 
-    const correctPlace = "Tuition"; 
+    const correctBirthday = "14 may"; 
+    const correctPlace = "yun hi"; 
 
     function goToStage(num) {
       document.querySelectorAll('.stage').forEach(s => s.style.display = 'none');
@@ -182,7 +182,7 @@
           securityStep = 2;
           document.getElementById('passInput').value = "";
           title.innerText = "🕵️ Just making sure...";
-          desc.innerHTML = "Where did we first meet?<br><small>(Hint: The Park)</small>";
+          desc.innerHTML = "My favourite song?<br><small>(Hint: Krish ka gana)</small>";
           status.innerText = "";
         } else {
           status.innerText = "Wrong date! Are you an imposter??";
