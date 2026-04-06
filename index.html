@@ -176,7 +176,7 @@
     <video id="video2" controls>
       <source src="BirthdaySong.mp4" type="video/mp4">
     </video>
-    <button id="btn-v2" class="next-btn" style="display:none;" onclick="goToStage(4)">Alisha you're looking beautiful. No i cannot see you but I know...Click Next ➔</button>
+    <button id="btn-v2" class="next-btn" style="display:none;" onclick="goToStage(4)">Alisha you're looking beautiful. No, i cannot see you but I know...Click Next ➔</button>
   </div>
 
   <div id="stage-4" class="stage">
@@ -192,7 +192,7 @@
       </div>
 
       <div id="captchaArea" style="display:none; flex-direction:column; align-items:center; margin-top:20px;">
-        <h1 style="font-size: 18px; color: #333; margin-bottom: 10px;">Where are you taking me to fill my full??</h1>
+        <h1 style="font-size: 18px; color: #333; margin-bottom: 10px;">So, where are we going??</h1>
         <input type="text" id="treatAnswer" placeholder="Type the restaurant/place here...">
         <button onclick="sendRSVP()" class="action-btn" style="background:#4CAF50; width:100%;">Confirm & Send 📲</button>
       </div>
@@ -205,7 +205,7 @@
     // --- STAGE LOGIC & SECURITY ---
     let securityStep = 1;
     const correctBirthday = "14 may"; 
-    const correctPlace = "tuition"; 
+    const correctPlace = "yun hi"; 
 
     function goToStage(num) {
       document.querySelectorAll('.stage').forEach(s => s.style.display = 'none');
@@ -229,7 +229,7 @@
           securityStep = 2;
           document.getElementById('passInput').value = "";
           title.innerText = "🕵️ Just making sure...";
-          desc.innerHTML = "Where did we first meet?<br><small>(Hint: Studying...)</small>";
+          desc.innerHTML = "My favourite song?<br><small>(Hint: Krish ka gana...)</small>";
           status.innerText = "";
         } else {
           status.innerText = "Wrong date! Are you an imposter??";
@@ -331,7 +331,7 @@
       document.getElementById('captchaArea').style.display = 'flex';
       
       kitty.innerText = "🥔😻🥔"; 
-      finalMsg.innerHTML = "Thank you AluSaag, God bless you...Mujhe maloon tha tum Na nhhi kah paogi...hehe Tumhara dil jo itna bada hai. ❤️<br><br>Okay!! Now submit this security question:";
+      finalMsg.innerHTML = "Thank you AluSaag, God bless you...Mujhe maloon tha tum Na nhhi kah paogi...hehe Tumhara dil jo itna bada hai. ❤️<br><br>Okay!! Now the last question for you:";
     });
 
     // --- FAKE BUTTON LOGIC ---
@@ -342,7 +342,7 @@
     // --- FINAL WHATSAPP LOGIC ---
     function sendRSVP() {
       const place = document.getElementById('treatAnswer').value;
-      if(!place || place.trim() === "") return alert("You have to tell me where we are going, AluSaag!");
+      if(!place || place.trim() === "") return alert("You have to tell me where are you taking me, AluSaag!");
       
       let waText = `Haan thik hai chalo baba, 😂\nFor my birthday treat, I am taking you to: ${place} 🥳`;
       window.open(`https://wa.me/917856978442?text=${encodeURIComponent(waText)}`);
