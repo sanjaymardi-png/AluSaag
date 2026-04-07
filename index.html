@@ -166,7 +166,7 @@
   <div id="stage-2" class="stage">
     <h2>A little trip down memory lane... 🎥</h2>
     <video id="video1" controls>
-      <source src="Vid2.mp4" type="video/mp4">
+      <source src="MyMovies01.mp4" type="video/mp4">
     </video>
     <button id="btn-v1" class="next-btn" style="display:none;" onclick="goToStage(3)">Next Thing ➔</button>
   </div>
@@ -228,8 +228,8 @@
         if (val === correctBirthday) {
           securityStep = 2;
           document.getElementById('passInput').value = "";
-          title.innerText = "🕵️ Just making sure...";
-          desc.innerHTML = "My favourite song?<br><small>(Hint: Krish ka gana...)</small>";
+          title.innerText = "🕵️ Just making sure...You should know this.";
+          desc.innerHTML = "My favourite song?<br><small>(Hint: Kirish ka gana...)</small>";
           status.innerText = "";
         } else {
           status.innerText = "Wrong date! Are you an imposter??";
