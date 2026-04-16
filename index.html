@@ -166,7 +166,7 @@
   <div id="stage-2" class="stage">
     <h2>A little trip down memory lane... 🎥</h2>
     <video id="video1" controls>
-      <source src="MyMovies01.mp4" type="video/mp4">
+      <source src="Al'sBdayVid.mp4" type="video/mp4">
     </video>
     <button id="btn-v1" class="next-btn" style="display:none;" onclick="goToStage(3)">Next Thing ➔</button>
   </div>
@@ -176,7 +176,7 @@
     <video id="video2" controls>
       <source src="BirthdaySong.mp4" type="video/mp4">
     </video>
-    <button id="btn-v2" class="next-btn" style="display:none;" onclick="goToStage(4)">Alisha you're looking beautiful. No, i cannot see you but I know...Click Next ➔</button>
+    <button id="btn-v2" class="next-btn" style="display:none;" onclick="goToStage(4)">A very Happy B'day from me. And Alisha, you're looking so beautiful today. No, i cannot see you, but I just know...Click Next ➔</button>
   </div>
 
   <div id="stage-4" class="stage">
@@ -228,7 +228,7 @@
         if (val === correctBirthday) {
           securityStep = 2;
           document.getElementById('passInput').value = "";
-          title.innerText = "🕵️ Just making sure...You should know this.";
+          title.innerText = "🕵️ Just making sure that it's really you...You should know this.";
           desc.innerHTML = "My favourite song?<br><small>(Hint: Kirish ka gana...)</small>";
           status.innerText = "";
         } else {
@@ -240,7 +240,7 @@
           goToStage(2);
           try { document.getElementById('bg-music').play(); } catch(e){}
         } else {
-          status.innerText = "Nope! That's not right. Who are you??";
+          status.innerText = "Nope! That's not right. 🤨Who are you??";
         }
       }
     }
@@ -259,9 +259,9 @@
 
     const noMessages = [
       "Please, don't be so cruel! 😿",
-      "Sirf Isha aur Saras tumhare dost hain...taras khao na mujh pe bhi 🥺",
-      "Kitni battamiz ho tum😾, Please humko bhi le jao",
-      "Please Alusaag, le jao na 😭"
+      "Sirf Isha aur Saras tumhare dost hain, hum nahin hain...taras khao na mujh pe bhi 🥺",
+      "Kitni battamiz ho tum😾,,,,:>(",
+      "Please Alusaag, le jao na 😭...PELEGE🥺"
     ];
 
     let noCount = 0;
@@ -331,7 +331,7 @@
       document.getElementById('captchaArea').style.display = 'flex';
       
       kitty.innerText = "🥔😻🥔"; 
-      finalMsg.innerHTML = "Thank you AluSaag, God bless you...Mujhe maloon tha tum Na nhhi kah paogi...hehe Tumhara dil jo itna bada hai. ❤️<br><br>Okay!! Now the last question for you:";
+      finalMsg.innerHTML = "Yey!!Thank you AluSaag, God bless you...Mujhe maloon tha tum Na nhhi kah paogi...hehe Tumhara dil jo itna bada hai. ❤️<br><br>Okay!! Now the last question for you:";
     });
 
     // --- FAKE BUTTON LOGIC ---
